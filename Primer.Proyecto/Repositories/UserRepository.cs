@@ -52,4 +52,8 @@ public class UserRepository : IUserRepository
         return user;
     }
 
+    public List<User> findAll()
+    {
+        return  _context.Users.ToList();
+    }
 }

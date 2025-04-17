@@ -2,6 +2,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using MyConsoleApp.Services;
 using Primer.Proyecto.Bd;
 using Primer.Proyecto.Models;
 using Primer.Proyecto.Repositories;
@@ -48,6 +49,9 @@ builder.Services.AddControllers();
 // Agregar servicios y repositorios
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IFoodService, FoodService>();
+builder.Services.AddScoped<IFoodRepository, FoodRepository>();
 
 // Configuración Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();

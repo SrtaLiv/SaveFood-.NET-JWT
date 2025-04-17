@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Primer.Proyecto.Bd;
 using Primer.Proyecto.Models;
+using Primer.Proyecto.Services;
 
 namespace Primer.Proyecto.Controllers
 {
@@ -10,80 +11,61 @@ namespace Primer.Proyecto.Controllers
     public class FoodController : ControllerBase
     {
         
-        private readonly BloggingContext _context;  
+        private readonly IFoodService _foodService;
 
-        private readonly ILogger<FoodController> _logger;
-
-        public FoodController(ILogger<FoodController> logger, BloggingContext context)
+        public FoodController(IFoodService foodService)
         {
-            _logger = logger;
-            _context = context;  // Se inicializa el contexto
+            _foodService = foodService;
         }
 
         // GET: api/Food
-        [HttpGet(Name = "GetFoods")]
-        public async Task<ActionResult<IEnumerable<Food>>> GetFoods()
+        [HttpGet( "GetFoods")]
+        public ActionResult<List<Food>> GetFoods()
         {
-            return await _context.Foods.ToListAsync();  // Obtiene todos los alimentos de la base de datos
+            return Ok(_foodService.GetFoods());
+        }
+        
+        // GET: api/Food/1
+        [HttpGet("GetFood")]
+        public ActionResult<List<Food>> GetFoodById(int id)
+        {
+            return Ok(_foodService.getFoodById(id));
         }
        
         // POST: api/Food
         [HttpPost]
-        public async Task<ActionResult<Food>> PostFood(Food food)
+        public ActionResult<Food> PostFood(Food food)
         {
-            _context.Foods.Add(food);
-            await _context.SaveChangesAsync();
-
-            return Ok(food);;
+            if (!FoodExists(food.FoodId))
+            {
+                return BadRequest();
+            }
+            return Ok(_foodService.Save(food));;
         }
         
         // PUT: api/Food/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<Food>> PutFood(Food food, int id)
+        public ActionResult<Food> PutFood(Food food)
         {
-            if (id != food.FoodId)
-            {
+            if(!FoodExists(food.FoodId))
                 return BadRequest();
-            }
-            
-            try
-            {
-               _context.Foods.Update(food);
-               await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!FoodExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return NoContent();
+        
+            return Ok(_foodService.UpdateFood(food));
         }
         
         // DELETE: api/Person/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePerson(int id)
+        public IActionResult DeletePerson(int id)
         {
-            var food = await _context.Foods.FindAsync(id);
-            if (food == null)
-            {
-                return NotFound();
-            }
-
-            _context.Foods.Remove(food);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            if(!FoodExists(id))
+                return BadRequest();
+            
+            return Ok(_foodService.Delete(id));
         }
         
         private bool FoodExists(int id)
         {
-            return _context.Foods.Any(e => e.FoodId == id);
+            return GetFoodById(id) != null;
         }
     }
 }

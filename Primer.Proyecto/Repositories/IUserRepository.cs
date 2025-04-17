@@ -10,4 +10,5 @@ public interface IUserRepository
     User save(User user);
     void delete(int userId);
     User updateUser(User user);
+    List<User> findAll();
 }

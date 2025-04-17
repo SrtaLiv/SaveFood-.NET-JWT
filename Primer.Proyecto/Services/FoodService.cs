@@ -1,43 +1,48 @@
 
+using Microsoft.AspNetCore.Http.HttpResults;
 using Primer.Proyecto.Models;
 using Primer.Proyecto.Repositories;
-using Microsoft.AspNetCore.Http;
 using Primer.Proyecto.Services;
 
 namespace MyConsoleApp.Services{
 
     public class FoodService : IFoodService
     {
-        private FoodRepository foodRepository;
+        private IFoodRepository foodRepository;
    //     private ImageService imageService;
 
-        public Food Save(Food food)
+   public FoodService(IFoodRepository foodRepository)
+   {
+       this.foodRepository = foodRepository;
+   }
+
+   public Food Save(Food food)
         {
            //if (file != null && file.isEmpty(){
              //  Image img = imagenService.uploadImage(file);
                //food.setImage(img);
            //}
-           return this.foodRepository.save(food);
+           return foodRepository.save(food);
         }
 
         public List<Food> GetFoods()
         {
-            throw new NotImplementedException();
+            return foodRepository.GetFoods();
         }
 
-        public Food? GetById(long id)
+        public Food? getFoodById(int id)
         {
-            throw new NotImplementedException();
+            return foodRepository.getFoodById(id);
         }
 
-        public void Delete(Food food)
+        public Food Delete(int id)
         {
-            throw new NotImplementedException();
+            return foodRepository.delete(id);
         }
 
         public Food UpdateFood(Food food)
         {
-            throw new NotImplementedException();
+            return foodRepository.updateFood(food);
         }
 
         public Food UpdateFoodImage(Food food, IFormFile file)

@@ -7,7 +7,7 @@ namespace Primer.Proyecto.Repositories
         List<Food> GetFoods();
         Food getFoodById(int foodId);
         Food save(Food food);
-        void delete(int foodId);
+        Food delete(int foodId);
         Food updateFood(Food food);
         Food updateFoodImage(Food food); // falta file
     }

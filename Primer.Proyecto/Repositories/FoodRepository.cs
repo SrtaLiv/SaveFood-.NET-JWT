@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Primer.Proyecto.Bd;
 using Primer.Proyecto.Models;
 
@@ -29,7 +30,7 @@ namespace Primer.Proyecto.Repositories
             return food;
         }
 
-        public void delete(int foodId)
+        public Food delete(int foodId)
         {
             var food = _context.Foods.Find(foodId);
             if (food != null)
@@ -37,14 +38,27 @@ namespace Primer.Proyecto.Repositories
                 _context.Foods.Remove(food);
                 _context.SaveChanges();
             }
+            return food;
         }
 
         public Food updateFood(Food food)
         {
-            _context.Foods.Update(food);
+            var existingFood = _context.Foods.Find(food.FoodId);
+
+            if (existingFood != null)
+            {
+                _context.Entry(existingFood).CurrentValues.SetValues(food);
+            }
+            else
+            {
+                _context.Foods.Attach(food);
+                _context.Entry(food).State = EntityState.Modified;
+            }
+
             _context.SaveChanges();
             return food;
         }
+
 
         public Food updateFoodImage(Food food)
         {

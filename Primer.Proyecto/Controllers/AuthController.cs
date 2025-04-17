@@ -12,12 +12,10 @@ namespace Primer.Proyecto.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly BloggingContext _context;
         private readonly IUserService _userService;
 
-        public AuthController(BloggingContext context, IUserService userService)
+        public AuthController( IUserService userService)
         {
-            _context = context;
             _userService = userService;
         }
         
@@ -42,6 +40,17 @@ namespace Primer.Proyecto.Controllers
             return Ok(user);
         }
 
-
+        [HttpPut]
+        public ActionResult<string> Put(int id)
+        {
+            return Ok(_userService.findById(id));
+        }
+        
+        [HttpGet]
+        public ActionResult<string> Get()
+        {
+            return Ok(_userService.findAll());
+        }
+        
     }
 }

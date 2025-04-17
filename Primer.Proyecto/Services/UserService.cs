@@ -22,8 +22,7 @@ public class UserService : IUserService
 
     public List<User> findAll()
     {
-        
-        throw new NotImplementedException();
+        return userRepository.findAll();
     }
 
     public User findById(int id)

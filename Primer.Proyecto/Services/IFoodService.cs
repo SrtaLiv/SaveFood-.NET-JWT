@@ -10,8 +10,8 @@ namespace Primer.Proyecto.Services
         Food Save(Food food);
         
         List<Food> GetFoods();
-        Food? GetById(long id);
-        void Delete(Food food);
+        Food? getFoodById(int id);
+        Food Delete(int id);
         Food UpdateFood(Food food);
         //Food UpdateFoodImage(Food food, IFormFile file);
         Food UpdateFoodImage(Food food, IFormFile file);
